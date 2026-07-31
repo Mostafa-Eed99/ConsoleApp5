@@ -13,9 +13,9 @@
         }
         public string PrintDetails()
         {
-            return $"InstructorId : {InstructorId}, Name : {Name},Specialization : {Specialization}";
+            return $"instructorid : {InstructorId}  , name : {Name}  ,specialization : {Specialization}";
         }
-
+       
 
     }
     class Course
@@ -32,7 +32,7 @@
 
         public string PrintDetails()
         {
-            return $"Course id : {CourseId},Title : {Title},Instructor : {Instructor} ";
+            return $"course id : {CourseId}  ,title : {Title}  ,instructor : {Instructor.Name} ";
         }
     }
 
@@ -58,7 +58,7 @@
         }
         public string PrintDetails()
         {
-            return $"Student id: {StudentId}, Name: {Name}, Age: {age}";
+            return $"student id: {StudentId}  , name: {Name}  , age: {age}";
         }
     }
     class StudentManager
@@ -125,11 +125,52 @@
             {
                 return false;
             }
-
             return student.Enroll(course);
         }
+        public void ShowAllStudents()
+        {
+            foreach (Student student in Students)
+            {
+                Console.WriteLine(student.PrintDetails());
+            }
+        }
+        public void ShowAllInstructor()
+        {
+            foreach (Instructor instructor in Instructors)
+            {
+                Console.WriteLine(instructor.PrintDetails());
+            }
+        }
+        public void ShowAllcourse()
+        {
+            foreach (Course course in Courses)
+            {
+                Console.WriteLine(course.PrintDetails());
+            }
+        }
+        public Student FindStudent(string input)
+        {
+            foreach (Student student in Students)
+            {
+                if (student.StudentId.ToString() == input || student.Name == input)
+                {
+                    return student;
+                }
+            }
+            return null;
+        }
+        public Course FindCourse(string input)
+        {
+            foreach (Course course in Courses)
+            {
+                if (course.CourseId.ToString() == input || course.Title == input)
+                {
+                    return course;
+                }
+            }
 
-
+            return null;
+        }
     }
 
     internal class Program
@@ -158,18 +199,14 @@
                 if (choice == "1")
                 {
 
-                    Console.Write("\nEnter Student ID: ");
+                    Console.Write("\nenter student id: ");
                     int id = int.Parse(Console.ReadLine());
-
-                    Console.Write("Enter Student Name: ");
+                    Console.Write("enter student name: ");
                     string name = Console.ReadLine();
-
-                    Console.Write("Enter Student Age: ");
+                    Console.Write("enter student age: ");
                     int age = int.Parse(Console.ReadLine());
                     Console.WriteLine("");
-
                     Student student = new Student(id, name, age);
-
                     manager.AddStudent(student);
                 }
                 else if (choice == "2")
@@ -183,13 +220,13 @@
                     Instructor instructor = new Instructor(id, name, specialization);
                     manager.AddInstructor(instructor);
                 }
-                else if (choice=="3")
+                else if (choice == "3")
                 {
-                    Console.Write("enter course iD: ");
+                    Console.Write("enter course id: ");
                     int id = int.Parse(Console.ReadLine());
-                    Console.Write("enter course name: ");
+                    Console.Write("enter course title: ");
                     string title = Console.ReadLine();
-                    Console.Write("enter instructor iD: ");
+                    Console.Write("enter instructor id: ");
                     int instructorId = int.Parse(Console.ReadLine());
                     Instructor instructor = manager.FindInstructor(instructorId);
                     if (instructor == null)
@@ -203,8 +240,78 @@
                         Console.WriteLine("Course added successfully!");
                     }
                 }
+                else if (choice == "4")
+                {
+                    Console.Write("enter student id: ");
+                    int studentId = int.Parse(Console.ReadLine());
+                    Console.Write("enter course id: ");
+                    int courseId = int.Parse(Console.ReadLine());
+                    bool result = manager.EnrollStudentInCourse(studentId, courseId);
 
-                
+                    if (result)
+                    {
+                        Console.WriteLine("student enrolled");
+                    }
+                    else
+                    {
+                        Console.WriteLine("not enrolled");
+                    }
+
+                }
+                else if (choice == "5")
+                {
+                    manager.ShowAllStudents();
+
+
+                }
+                else if (choice == "6")
+                {
+                    manager.ShowAllInstructor();
+
+
+                }
+                else if (choice == "7")
+                {
+                    manager.ShowAllcourse();
+
+                }
+                else if (choice == "8")
+                {
+                    Console.Write("enter student id or name: ");
+                    string input = Console.ReadLine();
+
+                    Student student = manager.FindStudent(input);
+
+                    if (student == null)
+                    {
+                     Console.WriteLine("student not found!");
+                    }
+                    else
+                    {
+                        Console.WriteLine(student.PrintDetails());
+                    }
+                }
+                else if (choice == "9")
+                {
+                    Console.Write("enter course id or title: ");
+                    string input = Console.ReadLine();
+
+                    Course course = manager.FindCourse(input);
+
+                    if (course == null)
+                    {
+                        Console.WriteLine("course not found!");
+                    }
+                    else
+                    {
+                        Console.WriteLine(course.PrintDetails());
+                    }
+                }
+                else if (choice == "10")
+                {
+                    break;
+                }
+
 
             } while (true);
         }
